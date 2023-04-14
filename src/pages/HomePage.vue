@@ -43,11 +43,12 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
+// import axios from 'axios';
 import { onMounted, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import * as fastXmlParser from 'fast-xml-parser';
 import { useQuasar } from 'quasar';
+import { api } from 'boot/axios'
 
 const route = useRoute();
 const $q = useQuasar()
@@ -65,8 +66,8 @@ const phoneNumber = ref(null)
 const ws = reactive({
   wsUrl: '',
   wsCodeCrypt: 'TBSSOS',
-  caUid: 'tbssos1_devp',
-  caPwd: '123456',
+  caUid: 'tbssos_uat',
+  caPwd: '123',
   appId: 'TbsSos.App',
   appCode: 'TBSSOS',
   merchantNo: '',
@@ -91,12 +92,11 @@ onMounted(async () => {
 
 
 
-  const loginPub = await axios
+  const loginPub = await api
     .get(
       `https://tbs.tbsdns.com/ClientAcct.MainService/1_1/MainService.asmx/LoginPub?wsCodeCrypt=TBSCLIENTACCTWS&acctUid=${ws.caUid}&acctPwd=${ws.caPwd}&loginType=TBSSOS&misc=`
     );
 
-  console.log(loginPub);
   var trimTags: string = loginPub.data.replace(exp, '');
   let convertResponse = trimTags
     .replaceAll('&lt;', '<')
@@ -106,14 +106,13 @@ onMounted(async () => {
 
   const parser = new fastXmlParser.XMLParser();
   let jsonObj = parser.parse(convertResponse);
-  console.log(jsonObj);
 
   ws.wsUrl = jsonObj.string.LoginAcctInfo.LoginAcct.WsUrl.replaceAll(
     '_wsver_',
     '5_7'
   );
 
-  const phoneCountryCodeList = await axios
+  const phoneCountryCodeList = await api
     .get(
       `${ws.wsUrl}/webapi/GetPhoneCountryCodeList?wsCodeCrypt=TBSSOS&caUid=${ws.caUid}&caPwd=${ws.caPwd}&keywordSearch=&startIndex=-1&noOfRecords=-1`
     );
@@ -128,7 +127,7 @@ onMounted(async () => {
 
 async function onSubmit() {
   $q.loading.show()
-  const inviteMember = await axios
+  const inviteMember = await api
     .get(
       `${ws.wsUrl}/webapi/InviteMember?wsCodeCrypt=TBSSOS&caUid=${ws.caUid}&caPwd=${ws.caPwd}&memberNo=&appId=TbsSos.App&userId=3A3EBA638C&appCode=TBSSOS&nickName=${name.value}&invitePhoneCountryCode=${encodeURIComponent(countryCodeSelected.value)}&invitePhoneNo=${phoneNumber.value}&merchantNo=${ws.merchantNo}`
     );

@@ -60,7 +60,8 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
+      publicPath: 'TbsSos.Web/UAT/register/5_7',
+      // publicPath: '',
       // analyze: true,
       // env: {},
       // rawDefine: {}
