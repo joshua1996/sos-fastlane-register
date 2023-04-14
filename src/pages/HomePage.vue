@@ -1,26 +1,40 @@
 <template>
   <q-page class="row items-center justify-evenly">
     <div class="q-pa-md">
+      <q-card class="my-card">
+        <img src="../assets/sos_img.png">
 
-      <q-form @submit="onSubmit" class="q-gutter-md">
-        <q-input v-model="name" label="Your name *" lazy-rules
-          :rules="[val => val && val.length > 0 || 'Please type something']">
+        <q-card-section>
+          <div class="text-h5">SOS Member Registration</div>
+          <div class="text-subtitle2">Agent name : TBS Solutions Sdn Bhd</div>
+        </q-card-section>
 
-        </q-input>
+        <q-card-section class="q-pt-none">
 
-        <q-input v-model="phoneNumber" label="Your phone number *" lazy-rules :rules="[
-          val => val !== null && val !== '' || 'Please type your phone number',
-        ]">
-          <template v-slot:prepend>
-            <q-select borderless v-model="countryCodeSelected" :options="countryCodeOptions" />
 
-          </template>
-        </q-input>
+          <q-form @submit="onSubmit" class="q-gutter-md">
+            <q-input v-model="name" label="Your name *" lazy-rules
+              :rules="[val => val && val.length > 0 || 'Please type something']">
 
-        <div>
-          <q-btn label="Submit" type="submit" color="primary" />
-        </div>
-      </q-form>
+            </q-input>
+
+            <q-input v-model="phoneNumber" label="Your phone number *" lazy-rules :rules="[
+              val => val !== null && val !== '' || 'Please type your phone number',
+            ]">
+              <template v-slot:prepend>
+                <q-select borderless v-model="countryCodeSelected" :options="countryCodeOptions" />
+
+              </template>
+            </q-input>
+
+            <div class="row justify-center">
+              <q-btn label="Submit" type="submit" color="primary" />
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
+
+
 
     </div>
   </q-page>
