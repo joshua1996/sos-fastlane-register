@@ -6,24 +6,24 @@
 
         <q-card-section>
           <div class="text-h5">SOS Member Registration</div>
-          <div class="text-subtitle2">Agent name : TBS Solutions Sdn Bhd</div>
+          <div class="text-subtitle2">Agent name : {{ agentProfileName }}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
 
 
           <q-form @submit="onSubmit" class="q-gutter-md">
-            <q-input v-model="name" label="Your name *" lazy-rules
+            <q-input input-class="text-left" v-model="name" label="Your name *" lazy-rules
               :rules="[val => val && val.length > 0 || 'Please type something']">
 
             </q-input>
 
             <q-input v-model="phoneNumber" label="Your phone number *" lazy-rules :rules="[
               val => val !== null && val !== '' || 'Please type your phone number',
+              val => /^[0-9]+$/.test(val) || 'Please enter a valid phone number'
             ]">
               <template v-slot:prepend>
                 <q-select borderless v-model="countryCodeSelected" :options="countryCodeOptions" />
-
               </template>
             </q-input>
 
@@ -66,7 +66,8 @@ import { api } from 'boot/axios'
 
 const route = useRoute();
 const $q = useQuasar()
-
+// var agentName = "TBS Solutions Sdn Bhd";
+const agentProfileName = ref('');
 const countryCodeSelected = ref('');
 let countryCodeOptions: string[] = [
 
@@ -125,6 +126,15 @@ onMounted(async () => {
     '_wsver_',
     '5_7'
   );
+
+
+  const getAgentProfile = await api
+    .get(
+      `${ws.wsUrl}/webapi/GetAgentProfile?wsCodeCrypt=TBSSOS&caUid=${ws.caUid}&caPwd=${ws.caPwd}&dbcode=${route.query.merchantNo}`
+    );
+
+  agentProfileName.value = getAgentProfile.data.Armaster[0].name;
+  console.log(agentProfileName);
 
   const phoneCountryCodeList = await api
     .get(
