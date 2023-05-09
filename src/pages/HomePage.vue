@@ -86,6 +86,7 @@ const ws = reactive({
   appId: 'TbsSos.App',
   appCode: 'TBSSOS',
   merchantNo: '',
+  userId: '',
 });
 
 const exp = new RegExp('<[^>]*>', 'm');
@@ -101,6 +102,8 @@ onMounted(async () => {
   }
   if (route.query.merchantNo) {
     ws.merchantNo = route.query.merchantNo as string;
+  } if (route.query.userId) {
+    ws.userId = route.query.userId as string;
   } else {
     dialogVisible.value = true;
   }
@@ -153,7 +156,7 @@ async function onSubmit() {
   $q.loading.show()
   const inviteMember = await api
     .get(
-      `${ws.wsUrl}/webapi/InviteMember?wsCodeCrypt=TBSSOS&caUid=${ws.caUid}&caPwd=${ws.caPwd}&memberNo=&appId=TbsSos.App&userId=3A3EBA638C&appCode=TBSSOS&nickName=${name.value}&invitePhoneCountryCode=${encodeURIComponent(countryCodeSelected.value)}&invitePhoneNo=${phoneNumber.value}&merchantNo=${ws.merchantNo}`
+      `${ws.wsUrl}/webapi/InviteMember?wsCodeCrypt=TBSSOS&caUid=${ws.caUid}&caPwd=${ws.caPwd}&memberNo=&appId=TbsSos.App&userId=${ws.userId}&appCode=TBSSOS&nickName=${name.value}&invitePhoneCountryCode=${encodeURIComponent(countryCodeSelected.value)}&invitePhoneNo=${phoneNumber.value}&merchantNo=${ws.merchantNo}`
     );
   $q.loading.hide()
   $q.dialog({
